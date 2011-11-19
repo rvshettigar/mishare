@@ -1,0 +1,95 @@
+<p>A command line interface for Amazon S3 using Ruby and the AWS SDK for Ruby.</p>
+
+<p>You need xclip,ruby and gems instaled to use this. </p>
+
+<h2>Installation</h2>
+
+<h4>1) Installing Requirements (for Ubuntu)</h4>
+
+<pre><code>sudo apt-get install xclip
+sudo apt-get install ruby1.9.1
+curl http://production.cf.rubygems.org/rubygems/rubygems-1.8.10.tgz --O rubygems-1.8.10.tgz
+tar -xzvf rubygems-1.8.10.tgz
+cd rubygems-1.8.10
+sudo ruby setup.rb
+
+sudo gem install aws-s3
+sudo gem install mail
+sudo gem install ruby-gmail
+</code></pre>
+
+<h4>2) Grab the script, copy to /usr/bin and make it executable.</h4>
+
+<pre><code>curl https://raw.github.com/hardikr/s3-rb/master/s3.rb --O s3
+sudo cp s3.rb /usr/bin/s3
+sudo chmod a+x /usr/bin/s3
+</code></pre>
+
+<h4>3) Create config file ~/.s3 with following format</h4>
+
+<pre><code>access-key
+secret-key
+bucket-name
+</code></pre>
+
+<h4>4) Optional: If you wish to use the (g)mail feature, create config file ~/.gmail with following format</h4>
+
+<pre><code>username
+password
+</code></pre>
+
+<h2>Examples</h2>
+
+<h4>Upload a file (URL copied to clipboard)</h4>
+
+<pre><code>s3 -f file.txt
+</code></pre>
+
+<h4>Upload a file and email it to john@doe.com</h4>
+
+<pre><code>s3 -f file.txt -e john@doe.com
+</code></pre>
+
+<h4>Generate public torrent URL for file.txt</h4>
+
+<pre><code>s3 torrent -f file.txt
+</code></pre>
+
+<h4>Generate public authenticated URL that expires after 180 seconds</h4>
+
+<pre><code>s3 expire -f file.txt -t 180
+</code></pre>
+
+<h2>Credits</h2>
+
+<p>Huge thanks to:</p>
+
+<p><a href="https://github.com/dcparker">@dcparker</a> for the <a href="https://github.com/dcparker/ruby-gmail">ruby-gmail gem</a>.</p>
+
+<p><a href="https://github.com/marcel">@marcel</a> for the amazing <a href="http://amazon.rubyforge.org/">aws-s3 Ruby SDK</a>.</p>
+
+<h2>LICENSE</h2>
+
+<pre><code>(The MIT License)
+
+Copyright (c) 2011 Hardik Ruparel
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+</code></pre>
