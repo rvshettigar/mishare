@@ -4,7 +4,7 @@ You need xclip,ruby and gems instaled to use this.
 
 ##Installation
 
-### 1) Installing Requirements (for Ubuntu)
+#### 1) Installing Requirements (for Ubuntu)
 
     sudo apt-get install xclip
     sudo apt-get install ruby1.9.1
@@ -17,33 +17,33 @@ You need xclip,ruby and gems instaled to use this.
     sudo gem install mail
     sudo gem install ruby-gmail
     
-### 2) Grab the script, copy to /usr/bin and make it executable.
+#### 2) Grab the script, copy to /usr/bin and make it executable.
 
-    curl https://raw.github.com/hardikr/s3-rb/master/s3.rb --O cloudapp
+    curl https://raw.github.com/hardikr/s3-rb/master/s3.rb --O s3
     sudo cp s3.rb /usr/bin/s3
     sudo chmod a+x /usr/bin/s3
 
-### 3) Create config file ~/.s3 with following format
+#### 3) Create config file ~/.s3 with following format
     access-key
     secret-key
     bucket-name
 
-### 4) Optional: If you wish to use the (g)mail feature, create config file ~/.gmail with following format
+#### 4) Optional: If you wish to use the (g)mail feature, create config file ~/.gmail with following format
     username
     password
 
 ## Examples
 
-### Upload a file (URL copied to clipboard)
+#### Upload a file (URL copied to clipboard)
     s3 -f file.txt
     
-### Upload a file and email it to john@doe.com
+#### Upload a file and email it to john@doe.com
     s3 -f file.txt -e john@doe.com
 
-### Generate public torrent URL for file.txt
+#### Generate public torrent URL for file.txt
     s3 torrent -f file.txt
 
-### Generate public authenticated URL that expires after 180 seconds
+#### Generate public authenticated URL that expires after 180 seconds
     s3 expire -f file.txt -t 180
 
 ## Credits
@@ -52,13 +52,13 @@ Huge thanks to:
 
 [@dcparker](https://github.com/dcparker) for the [ruby-gmail gem](https://github.com/dcparker/ruby-gmail).
 
-[@marcel](https://github.com/marcel) for the amazing [aws-s3 Ruby SDK].
+[@marcel](https://github.com/marcel) for the amazing [aws-s3 Ruby SDK](http://amazon.rubyforge.org/).
 
 ## LICENSE
 
     (The MIT License)
     
-    Copyright (c) 2011 Hardik Ruparel , http://blog.hardikr.com
+    Copyright (c) 2011 Hardik Ruparel
     
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the
