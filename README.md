@@ -46,6 +46,8 @@ You need xclip,ruby and gems instaled to use this.
 #### Generate public authenticated URL that expires after 180 seconds
     s3 expire -f file.txt -t 180
 
+#### Cloudapp and Imgur
+s3-rb also supports uploads to Cloudapp and Imgur in the cl-im branch. For more information, click [here](http://code.hardikr.com/s3-rb#clim).
 ## Credits
 
 Huge thanks to:
