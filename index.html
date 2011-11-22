@@ -67,6 +67,43 @@ password
 <pre>s3 expire -f file.txt -t 180
 </pre>
 
+<h2>Update</h2>
+<p>On branch <a href="https://github.com/hardikr/s3-rb/tree/cl-im">cl-im</a>, there are two more switches to the
+command. You can use <b>-i</b> to upload an image to <a href="http://imgur.com">Imgur</a>, and <b>-c</b> to upload to 
+<a href="http://getcloudapp.com">cloudapp</a> instead of S3.
+</p>
+<p>For cloudapp, you need to get the cloudapp_api gem. Get it by running:</p>
+
+<pre>gem install cloudapp_api
+</pre>
+
+<p>To use cloudapp and/or imgur, simply create config files as follows. For imgur, we have <b>~/.imgur</b></p>
+
+<pre>api-key
+cookie
+</pre>
+
+<p>Get your API key from Imgur.com. The cookie is important if you want the uploaded image to show up in your account. Follow the steps
+<a href="http://code.lancepollard.com/upload-images-to-imgur-with-ruby">on this blog post</a> to retrieve your cookie.
+Otherwise, you can leave out the cookie.</p>
+
+<p>For cloudappp, we have <b>~/.cloudapp</b></p>
+
+<pre>username
+password
+</pre>
+
+<p>Now you can run cloudapp and imgur by using the -i and -c switches. For example, to upload a file to cloudapp and
+email it to john@doe.com, we would do:</p>
+
+<pre>s3 email -f file.txt -e john@doe.com -c
+</pre>
+
+<p>Similarly, to upload an image to imgur.</p>
+
+<pre>s3 ul -f file.txt -i
+</pre>
+
 <h2>Credits</h2>
 
 <p>Huge thanks to:</p>
