@@ -46,6 +46,44 @@ You need xclip,ruby and gems instaled to use this.
 #### Generate public authenticated URL that expires after 180 seconds
     s3 expire -f file.txt -t 180
 
+## Cloudapp and Imgur
+
+On branch [cl-im][1], there are two more switches to the command. You can use **-i** to upload an image to [Imgur][2], and **-c** to upload to [cloudapp][3] instead of S3. 
+
+First, switch your branch already!
+
+    git checkout cl-im
+
+For cloudapp, you need to get the cloudapp_api gem. Get it by running:
+
+    gem install cloudapp_api
+
+To use cloudapp and/or imgur, simply create config files as follows. For imgur, we have **~/.imgur**
+
+    api-key
+    cookie
+
+Get your API key from Imgur.com. The cookie is important if you want the uploaded image to show up in your account. Follow the steps [on this blog post][4] to retrieve your cookie. Otherwise, you can leave out the cookie.
+
+For cloudappp, we have **~/.cloudapp**
+
+    username
+    password
+
+Now you can run cloudapp and imgur by using the -i and -c switches. For example, to upload a file to cloudapp and email it to john@doe.com, we would do:
+
+    s3 email -f file.txt -e john@doe.com -c
+
+Similarly, to upload an image to imgur.
+
+    s3 ul -f file.txt -i
+
+ [1]: https://github.com/hardikr/s3-rb/tree/cl-im
+ [2]: http://imgur.com
+ [3]: http://getcloudapp.com
+ [4]: http://code.lancepollard.com/upload-images-to-imgur-with-ruby
+
+
 ## Credits
 
 Huge thanks to:
