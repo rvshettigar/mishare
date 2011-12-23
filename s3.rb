@@ -29,22 +29,34 @@
 # 
 
 require 'rubygems'
+require 'json'
+require 'optparse'
 begin
   require 'aws/s3'
 rescue LoadError
-  puts "You need to install S3 Ruby gem: gem install aws-s3"
+  puts "You need to install S3 Ruby gem: \ngem install aws-s3"
   exit!(1)
 end
 begin
   require 'gmail'
 rescue LoadError
-  puts "You need to install ruby-gmail Gem: gem install ruby-gmail"
+  puts "You need to install ruby-gmail gem: \ngem install ruby-gmail"
   exit!(1)
 end
-require 'optparse'
-require 'rest_client'
-require 'json'
-require 'cloudapp_api'
+begin
+	require 'rest_client'
+rescue LoadError
+	puts "You need to install rest-client gem: \n gem install rest-client"
+	exit!(1)
+end
+begin
+	require 'cloudapp_api'
+rescue LoadError
+	puts "You need to install cloudapp_api gem: \ngem install cloudapp_api"
+	exit!(1)
+end
+
+# End of require. Start code
 
 class HTTParty::Response
   def ok? ; true end
@@ -218,8 +230,12 @@ when "ul"
 		else
 			url = s3upload(options[:file],options[:ssl])
 		end
-		system("echo '#{url}' | xclip -selection clipboard")
-		puts "\n URL copied to clipboard!"
+		if(!options[:email])
+			system("echo '#{url}' | xclip -selection clipboard")
+			puts "\n URL copied to clipboard!"
+		else
+			sendemail(options[:email],url);
+		end
 	end
 when "email"
 	if !options[:file] and !options[:email]
@@ -248,8 +264,12 @@ when "expire"
 		end
 		url = s3url(options[:file],options[:ssl],options[:time])
 		puts url
-		system("echo '#{url}' | xclip -selection c")
-		puts "\n URL copied to clipboard!"
+		if !options[:email]
+			system("echo '#{url}' | xclip -selection c")
+			puts "\n URL copied to clipboard!"
+		else
+			sendemail(options[:email],url);
+		end
 	end
 when "torrent"
 	if !options[:file]
@@ -259,8 +279,12 @@ when "torrent"
 		if result
 			url = s3url(options[:file],options[:ssl],false)+"?torrent"
 			puts url
-			system("echo '#{url}' | xclip -selection c")
-			puts "\n URL copied to clipboard!"
+			if !options[:email]
+				system("echo '#{url}' | xclip -selection c")
+				puts "\n URL copied to clipboard!"
+			else
+				sendemail(options[:email],url);
+			end
 		else
 			puts result
 		end
