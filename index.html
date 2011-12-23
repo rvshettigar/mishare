@@ -13,12 +13,16 @@
 
 <h4>1) Installing Requirements (for Ubuntu)</h4>
 
-<pre>sudo apt-get install xclip
+<pre>#Install dependencies
+sudo apt-get install xclip
 sudo apt-get install ruby1.9.1
 curl http://production.cf.rubygems.org/rubygems/rubygems-1.8.10.tgz --O rubygems-1.8.10.tgz
 tar -xzvf rubygems-1.8.10.tgz
 cd rubygems-1.8.10
 sudo ruby setup.rb
+
+# Update rubygems
+update_rubygems
 
 sudo gem install aws-s3
 sudo gem install mail
