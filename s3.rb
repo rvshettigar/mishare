@@ -121,7 +121,7 @@ def clupload(file)
 	cl_config_file = "#{ENV['HOME']}/.cloudapp"
 	if !File.exist?(cl_config_file)
 	  	puts "Looks like you need to setup your Cloudapp credentials. "
-		clEmail = get_secret("\n Enter your email address: ")
+		clEmail = get_normal("\n Enter your email address: ")
 		clPassword = get_secret("\n Enter your password:  ")
 		config_file = File.new(cl_config_file, "w")
 		config_file.puts(clEmail)
@@ -141,43 +141,27 @@ def getimgurauth()
 	if !File.exist?(imgur_config_file)
 		puts "Looks like you need to setup your Imgur credentials. "
 		imgurAPIKey = get_normal("\n Enter your Imgur API Key: ")
-		imgurCookie = get_normal("\n Enter your Cookie (if you want to upload to your account, else press Return):  ")
 		config_file = File.new(imgur_config_file, "w")
 		config_file.puts(imgurAPIKey)
-		if(imgurCookie)
-			config_file.puts(imgurCookie)
-		end
 		config_file.close()
 	end
-	imgurapi,imgurcookie = File.read(imgur_config_file).split("\n")
-	if(!imgurcookie)
-		imguruth = imgurapi
-	else
-		imgurauth = [imgurapi,imgurcookie]
-	end
-	return imgurauth
+	imgurFileHandler = File.open(imgur_config_file,"rb")
+	return imgurFileHandler.read
 end
 
-def imgur(key, cookie, file_path)
+def imgur(key, file_path)
   url = "http://imgur.com/api/upload.json"
   data = {
     :key     => key, 
     :image 	 => File.open(file_path)
   }
-  headers = {
-    :cookies => {"IMGURSESSION" => cookie}
-  }
-  response = RestClient.post(url, data, headers)
+  response = RestClient.post(url, data)
   return JSON.parse(response.body)["rsp"]["image"]["original_image"]  
 end
 
 def imgurupload(file)
 	imgurauth = getimgurauth()			
-	if imgurauth.kind_of? String # No cookie, so upload to public imgur
-		imgurresult = imgur(imgurauth, nil, file)
-	else 
-		imgurresult = imgur(imgurauth[0], imgurauth[1], options[:file])
-	end
+	imgurresult = imgur(imgurauth, file)
 	return imgurresult
 end
 
