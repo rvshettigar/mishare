@@ -55,11 +55,21 @@ rescue LoadError
 	puts "You need to install cloudapp_api gem: \ngem install cloudapp_api"
 	exit!(1)
 end
+require 'highline/import'
+require 'encrypted_strings'
 
 # End of require. Start code
 
 class HTTParty::Response
   def ok? ; true end
+end
+
+def get_secret(prompt=secret_msg)
+   	ask(prompt) {|q| q.echo = false}
+end
+
+def get_normal(prompt=normal_msg)
+	ask(prompt) {|q| q.echo = true}
 end
 
 # Init options hash to nil
@@ -71,13 +81,28 @@ options[:imgur] = false
 # Upload to Cloudapp is false by default
 options[:cl] = false
 
-config_file = "#{ENV['HOME']}/.s3"
-unless File.exist?(config_file)
-	puts "You need to type your Access Key ID, Secret Key and Bucket (one per line) into " + "`~/.s3`"
-    exit!(1)
+s3_config_file = "#{ENV['HOME']}/.s3"
+
+if !File.exist?(s3_config_file)
+	puts "Looks like you need to setup your S3 credentials. "
+	s3AccessKey = get_secret("\n Enter your Access Key ID: ")
+	s3SecretKey = get_secret("\n Enter your Secret Key:  ")
+	s3BucketName = get_normal("\n Enter your Bucket name: ")
+	config_file = File.new(s3_config_file, "w")
+	config_file.puts(s3AccessKey)
+	config_file.puts(s3SecretKey)
+	config_file.puts(s3BucketName)
+	config_file.close()
 end
 
 def s3upload(file,ssl)
+	s3_config_file = "#{ENV['HOME']}/.s3" 
+	accesskey,secretkey,$bucket = File.read(s3_config_file).split("\n")
+	AWS::S3::Base.establish_connection!(
+	    :access_key_id     => accesskey,
+	    :secret_access_key => secretkey
+	);
+
 	AWS::S3::S3Object.store(File.basename(file), open(file), $bucket, :access => :public_read) #for now only public
 	url = s3url(file,ssl,false)
 	puts url
@@ -93,13 +118,18 @@ def s3url(file,ssl,time)
 end
 
 def clupload(file)
-	config_file = "#{ENV['HOME']}/.cloudapp"
-	unless File.exist?(config_file)
-	  puts "You need to type your email and password (one per line) into "+
-	       "`~/.cloudapp`"
-	  exit!(1)
+	cl_config_file = "#{ENV['HOME']}/.cloudapp"
+	if !File.exist?(cl_config_file)
+	  	puts "Looks like you need to setup your Cloudapp credentials. "
+		clEmail = get_secret("\n Enter your email address: ")
+		clPassword = get_secret("\n Enter your password:  ")
+		config_file = File.new(cl_config_file, "w")
+		config_file.puts(clEmail)
+		config_file.puts(clPassword.encrypt(:symmetric, :password => 'my_secret_key'))
+		config_file.close()
 	end
-	email,password = File.read(config_file).split("\n")
+	email,password = File.read(cl_config_file).split("\n")
+	password = password.decrypt(:symmetric, :password => 'my_secret_key')
 	puts "Connecting to CloudApp..."
 	CloudApp.authenticate(email,password)
 	url = CloudApp::Item.create(:upload, {:file => file}).url
@@ -108,9 +138,16 @@ end
 
 def getimgurauth()
 	imgur_config_file = "#{ENV['HOME']}/.imgur"
-	unless File.exist?(imgur_config_file)
-		puts "You need to type your API Key and Cookie (if you want to upload to your own account) (one per line) into " + "`~/.imgur`"
-    	exit!(1)
+	if !File.exist?(imgur_config_file)
+		puts "Looks like you need to setup your Imgur credentials. "
+		imgurAPIKey = get_normal("\n Enter your Imgur API Key: ")
+		imgurCookie = get_normal("\n Enter your Cookie (if you want to upload to your account, else press Return):  ")
+		config_file = File.new(imgur_config_file, "w")
+		config_file.puts(imgurAPIKey)
+		if(imgurCookie)
+			config_file.puts(imgurCookie)
+		end
+		config_file.close()
 	end
 	imgurapi,imgurcookie = File.read(imgur_config_file).split("\n")
 	if(!imgurcookie)
@@ -144,32 +181,34 @@ def imgurupload(file)
 	return imgurresult
 end
 
-def sendemail(recipient,url)
-	gconfig_file = "#{ENV['HOME']}/.gmail"
-		unless File.exist?(gconfig_file)
-    puts "You need to type your email and password (one per line) into " + "`~/.gmail`"
-    exit!(1)
-  	end
+def sendemail(recipients,url)
+	g_config_file = "#{ENV['HOME']}/.gmail"
+	if !File.exist?(g_config_file)
+	  	puts "Looks like you need to setup your GMail credentials. "
+		gEmail = get_normal("\n Enter your email address: ")
+		gPassword = get_secret("\n Enter your password:  ")
+		config_file = File.new(g_config_file, "w")
+		config_file.puts(gEmail)
+		config_file.puts(gPassword.encrypt(:symmetric, :password => 'my_secret_key'))
+		config_file.close()
+	end
   
-  	gusername,gpassword = File.read(gconfig_file).split("\n")
+  	gusername,gpassword = File.read(g_config_file).split("\n")
+  	gpassword = gpassword.decrypt(:symmetric, :password => 'my_secret_key')
 
   	Gmail.new(gusername, gpassword) do |gmail|
     	gmail.deliver do
-      		to recipient
-      		subject "Here's the file you requested!"
-      		html_part do
-        		body "Click the link below to view/download the file: \n" + url
-      		end
+      		recipients.each do |recipient|
+	      		to recipient
+	      		subject "Here's the file you requested!"
+	      		html_part do
+	        		body "Click the link below to view/download the file: \n" + url
+	      		end
+	      	end
     	end
   	end
 end
 
-accesskey,secretkey,$bucket = File.read(config_file).split("\n")
-
-AWS::S3::Base.establish_connection!(
-    :access_key_id     => accesskey,
-    :secret_access_key => secretkey
-);
 
 s3rb = OptionParser.new do |opt|
 	opt.banner = "\nUsage: s3 COMMAND [OPTIONS]"
@@ -191,7 +230,7 @@ s3rb = OptionParser.new do |opt|
     	options[:file] = file
   	end
 
-	opt.on("-e","--email EMAIL","which e-mail address you want to send the link of the uploaded file to") do |email|
+	opt.on("-e","--email EMAIL1,EMAIL2",Array,"which e-mail address you want to send the link of the uploaded file to") do |email|
     	options[:email] = email
   	end
   	
