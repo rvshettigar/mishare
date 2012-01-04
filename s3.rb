@@ -32,19 +32,19 @@ require 'rubygems'
 require 'json'
 require 'optparse'
 begin
-  require 'aws/s3'
+	require 'aws/s3'
 rescue LoadError
-  puts "You need to install S3 Ruby gem: \ngem install aws-s3"
-  exit!(1)
+	puts "You need to install S3 Ruby gem: \ngem install aws-s3"
+	exit!(1)
 end
 begin
-  require 'gmail'
+	require 'gmail'
 rescue LoadError
-  puts "You need to install ruby-gmail gem: \ngem install ruby-gmail"
-  exit!(1)
+	puts "You need to install ruby-gmail gem: \ngem install ruby-gmail"
+	exit!(1)
 end
 begin
-	require 'rest_client'
+require 'rest_client'
 rescue LoadError
 	puts "You need to install rest-client gem: \n gem install rest-client"
 	exit!(1)
@@ -65,7 +65,7 @@ class HTTParty::Response
 end
 
 def get_secret(prompt=secret_msg)
-   	ask(prompt) {|q| q.echo = false}
+	ask(prompt) {|q| q.echo = false}
 end
 
 def get_normal(prompt=normal_msg)
@@ -99,8 +99,8 @@ def s3upload(file,ssl)
 	s3_config_file = "#{ENV['HOME']}/.s3" 
 	accesskey,secretkey,$bucket = File.read(s3_config_file).split("\n")
 	AWS::S3::Base.establish_connection!(
-	    :access_key_id     => accesskey,
-	    :secret_access_key => secretkey
+		:access_key_id     => accesskey,
+		:secret_access_key => secretkey
 	);
 
 	AWS::S3::S3Object.store(File.basename(file), open(file), $bucket, :access => :public_read) #for now only public
@@ -120,7 +120,7 @@ end
 def clupload(file)
 	cl_config_file = "#{ENV['HOME']}/.cloudapp"
 	if !File.exist?(cl_config_file)
-	  	puts "Looks like you need to setup your Cloudapp credentials. "
+		puts "Looks like you need to setup your Cloudapp credentials. "
 		clEmail = get_normal("\n Enter your email address: ")
 		clPassword = get_secret("\n Enter your password:  ")
 		config_file = File.new(cl_config_file, "w")
@@ -152,8 +152,8 @@ end
 def imgur(key, file_path)
   url = "http://imgur.com/api/upload.json"
   data = {
-    :key     => key, 
-    :image 	 => File.open(file_path)
+	:key     => key, 
+	:image 	 => File.open(file_path)
   }
   response = RestClient.post(url, data)
   return JSON.parse(response.body)["rsp"]["image"]["original_image"]  
@@ -168,7 +168,7 @@ end
 def sendemail(recipients,url)
 	g_config_file = "#{ENV['HOME']}/.gmail"
 	if !File.exist?(g_config_file)
-	  	puts "Looks like you need to setup your GMail credentials. "
+		puts "Looks like you need to setup your GMail credentials. "
 		gEmail = get_normal("\n Enter your email address: ")
 		gPassword = get_secret("\n Enter your password:  ")
 		config_file = File.new(g_config_file, "w")
@@ -177,20 +177,20 @@ def sendemail(recipients,url)
 		config_file.close()
 	end
   
-  	gusername,gpassword = File.read(g_config_file).split("\n")
-  	gpassword = gpassword.decrypt(:symmetric, :password => 'my_secret_key')
+	gusername,gpassword = File.read(g_config_file).split("\n")
+	gpassword = gpassword.decrypt(:symmetric, :password => 'my_secret_key')
 
-  	Gmail.new(gusername, gpassword) do |gmail|
-    	gmail.deliver do
-      		recipients.each do |recipient|
-	      		to recipient
-	      		subject "Here's the file you requested!"
-	      		html_part do
-	        		body "Click the link below to view/download the file: \n" + url
-	      		end
-	      	end
-    	end
-  	end
+	Gmail.new(gusername, gpassword) do |gmail|
+		gmail.deliver do
+			recipients.each do |recipient|
+				to recipient
+				subject "Here's the file you requested!"
+				html_part do
+					body "Click the link below to view/download the file: \n" + url
+				end
+			end
+		end
+	end
 end
 
 
@@ -211,32 +211,32 @@ s3rb = OptionParser.new do |opt|
 	opt.separator  "Options"
 
 	opt.on("-f","--file FILE","which file you want to upload") do |file|
-    	options[:file] = file
-  	end
+		options[:file] = file
+	end
 
 	opt.on("-e","--email EMAIL1,EMAIL2",Array,"which e-mail address you want to send the link of the uploaded file to") do |email|
-    	options[:email] = email
-  	end
-  	
-  	opt.on("-t","--time TIME","Time(in secons) in which file expires. Defaults to 60 minutes") do |time|
-    	options[:time] = time
-  	end
+		options[:email] = email
+	end
+	
+	opt.on("-t","--time TIME","Time(in secons) in which file expires. Defaults to 60 minutes") do |time|
+		options[:time] = time
+	end
 	
 	opt.on("-s","--ssl","Use SSL (returns https URL)") do
-    	options[:ssl] = true
-  	end
+		options[:ssl] = true
+	end
 
-  	opt.on("-i","--imgur","Uploads image to imgur instead of s3") do
-    	options[:imgur] = true
-  	end
+	opt.on("-i","--imgur","Uploads image to imgur instead of s3") do
+		options[:imgur] = true
+	end
 
-  	opt.on("-c","--cl","Upload to cloudapp instead of s3") do
-  		options[:cl] = true
-  	end
+	opt.on("-c","--cl","Upload to cloudapp instead of s3") do
+		options[:cl] = true
+	end
 
 	opt.on("-h","--help","help") do
-    	puts s3rb
-  	end
+		puts s3rb
+	end
 end
 
 s3rb.parse!
