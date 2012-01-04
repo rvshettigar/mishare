@@ -27,7 +27,6 @@
 # 
 # For complete documentation and license, see http://code.hardikr.com/s3-rb
 # 
-#
 
 require 'rubygems'
 require 'json'
