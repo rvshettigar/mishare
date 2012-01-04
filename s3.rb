@@ -3,7 +3,7 @@
 # s3-rb
 #
 # Command-line interface for Amazon S3 using AWS Ruby Gem (http://amazon.rubyforge.org/)
-# Also, options for Cloudapp and Imgur.
+# Also, there are options to upload to Cloudapp and Imgur, and also email the resulting link via GMail.
 #
 # Example:
 #
@@ -11,21 +11,21 @@
 # 	s3 ul -f file.txt
 #
 # => Upload file.txt and email it's link to john@doe.com
-# 	s3 email -f file.txt -e john@doe.com
+# 	s3 ul -f file.txt -e john@doe.com
 #
 # => Generate public torrent URL for file.txt
-#   s3 torrent -f file.txt
+#  s3 torrent -f file.txt
 #
-# => Generate public authenticated URL that expires after 180 seconds
-#   s3 expire -f file.txt -t 180
+# => Generate public authenticated URL that expires after 180 seconds and email it to john@doe.com
+#  s3 expire -f file.txt -t 180 -e john@doe.com
 #
 # => Upload file.txt to cloudapp and email it to john@doe.com
-#   s3 email -f file.txt -e john@doe.com -c
+#  s3 ul -f file.txt -e john@doe.com -c
 #
 # => Upload pic.png to Imgur and email it to john@doe.com
-#   s3 email -f pic.png -e john@doe.com -i
+#  s3 ul -f pic.png -e john@doe.com -i
 # 
-# For complete documentation and license, see http://code.hardikr.com/s3-rb
+# For complete documentation and licensing information, see http://code.hardikr.com/s3-rb
 # 
 
 require 'rubygems'
@@ -197,18 +197,20 @@ end
 s3rb = OptionParser.new do |opt|
 	opt.banner = "\nUsage: s3 COMMAND [OPTIONS]"
 	opt.separator  ""
-	opt.separator  "COMMANDS"
+	opt.separator  "**COMMANDS**"
 	opt.separator  "     ul:     Uploads a file to an S3 bucket. "
-	opt.separator  "          	 USAGE: s3 ul -f FILE"
-	opt.separator  "     email:  Uploads a file to an S3 Bucket and then E-mails it."
-	opt.separator  "          	 USAGE: s3 email -f FILE -e EMAIL"
+	opt.separator  "          	 USAGE: s3 ul -f FILE [-e EMAIL1,EMAIL2... ]"
 	opt.separator  "     expire: Generate expiring link to a file with time in seconds. Time is optional, and will default to 3600 seconds."
-	opt.separator  "          	 USAGE: s3 expire -f FILE -t TIME"
+	opt.separator  "          	 USAGE: s3 expire -f FILE [-t TIME] [-e EMAIL1,EMAIL2... ]"
 	opt.separator  "     torrent: Generate a public torrent for a specified file."
-	opt.separator  "          	 USAGE: s3 expire -f FILE"
+	opt.separator  "          	 USAGE: s3 torrent -f FILE [-e EMAIL1,EMAIL2... ]"
+	opt.separator  ""
+	opt.separator  " As shown above, all of the commands can be optionally used with the email -e switch, followed by a comma-separated list of email addresses."
+	opt.separator  ""
+	opt.separator  ""
 		
 
-	opt.separator  "Options"
+	opt.separator  "**OPTIONS**"
 
 	opt.on("-f","--file FILE","which file you want to upload") do |file|
 		options[:file] = file
@@ -259,24 +261,6 @@ when "ul"
 		else
 			sendemail(options[:email],url);
 		end
-	end
-when "email"
-	if !options[:file] and !options[:email]
-		puts "Usage: s3 -e FILE -e EMAIL"
-	else
-		if options[:cl]
-			url = clupload(options[:file])
-		elsif options[:imgur]
-			imgurauth = getimgurauth()			
-			if imgurauth.kind_of? String # No cookie, so upload to public imgur
-				url = imgur(imgurauth, nil, options[:file])
-			else 
-				url = imgur(imgurauth[0], imgurauth[1], options[:file])
-			end
-		else
-			url = s3upload(options[:file],options[:ssl])
-		end
-		sendemail(options[:email],url);
 	end
 when "expire"
 	if !options[:file]
