@@ -85,8 +85,8 @@ s3_config_file = "#{ENV['HOME']}/.s3"
 
 if !File.exist?(s3_config_file)
 	puts "Looks like you need to setup your S3 credentials. "
-	s3AccessKey = get_secret("\n Enter your Access Key ID: ")
-	s3SecretKey = get_secret("\n Enter your Secret Key:  ")
+	s3AccessKey = get_normal("\n Enter your Access Key ID: ")
+	s3SecretKey = get_normal("\n Enter your Secret Key:  ")
 	s3BucketName = get_normal("\n Enter your Bucket name: ")
 	config_file = File.new(s3_config_file, "w")
 	config_file.puts(s3AccessKey)
@@ -209,7 +209,6 @@ s3rb = OptionParser.new do |opt|
 	opt.separator  ""
 	opt.separator  ""
 		
-
 	opt.separator  "**OPTIONS**"
 
 	opt.on("-f","--file FILE","which file you want to upload") do |file|
