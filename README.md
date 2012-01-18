@@ -15,6 +15,11 @@ You need xclip, ruby and gems instaled to use this.
     cd rubygems-1.8.12
     sudo ruby setup.rb
     
+    sudo gem install json
+    sudo gem install rest_client
+    sudo gem install cloudapp_api
+    sudo gem install highline
+    sudo gem install encrypted_strings
     sudo gem install aws-s3
     sudo gem install mail
     sudo gem install ruby-gmail
