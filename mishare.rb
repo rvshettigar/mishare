@@ -1,31 +1,31 @@
 #!/usr/bin/env ruby
 # 
-# s3-rb
+# mishare
 #
-# Command-line interface for Amazon S3 using AWS Ruby Gem (http://amazon.rubyforge.org/)
-# Also, there are options to upload to Cloudapp and Imgur, and also email the resulting link via GMail.
+# Command-line interface for Amazon S3, Cloudapp and Imgur
+# You can also use it to email the file to someone (Gmail only)
 #
 # Example:
 #
 # => Upload file.txt
-# 	s3 ul -f file.txt
+# 	mishare ul -f file.txt
 #
-# => Upload file.txt and email it's link to john@doe.com
-# 	s3 ul -f file.txt -e john@doe.com
+# => Upload file.txt and email it's link to john@doe.com and jane@doe.com
+# 	mishare ul -f file.txt -e john@doe.com jane@doe.com
 #
 # => Generate public torrent URL for file.txt
-#  s3 torrent -f file.txt
+#  	mishare torrent -f file.txt
 #
 # => Generate public authenticated URL that expires after 180 seconds and email it to john@doe.com
-#  s3 expire -f file.txt -t 180 -e john@doe.com
+#  	mishare expire -f file.txt -t 180 -e john@doe.com
 #
 # => Upload file.txt to cloudapp and email it to john@doe.com
-#  s3 ul -f file.txt -e john@doe.com -c
+#  	mishare ul -f file.txt -e john@doe.com -c
 #
 # => Upload pic.png to Imgur and email it to john@doe.com
-#  s3 ul -f pic.png -e john@doe.com -i
+#  	mishare ul -f pic.png -e john@doe.com -i
 # 
-# For complete documentation and licensing information, see http://code.hardikr.com/s3-rb
+# For complete documentation and licensing information, see http://code.hardikr.com/mishare
 # 
 
 require 'rubygems'
