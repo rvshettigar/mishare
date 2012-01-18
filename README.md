@@ -35,7 +35,7 @@ If you want to manually install everything, or for other operating systems, chec
 #### 2) Grab the script, copy to /usr/bin and make it executable.
 
     curl https://raw.github.com/hardikr/s3-rb/master/mishare.rb --O mishare
-    sudo cp s3.rb /usr/bin/mishare
+    sudo cp mishare.rb /usr/bin/mishare
     sudo chmod a+x /usr/bin/mishare
 
 #### 3) Now run the script.
