@@ -6,7 +6,15 @@ You need xclip, ruby and gems instaled to use this.
 
 ##Installation
 
-#### 1) Installing Requirements (for Ubuntu)
+The shell-file install shown below installs ruby1.9.1, rubygems(and a few gems: list is below) and xclip. I suggest you check out the script for yourself before running anything.
+
+### Ubuntu only:
+    
+    curl https://raw.github.com/hardikr/s3-rb/master/install.sh | sh
+
+If you want to manually install everything, or for other operating systems, check below:
+
+####1) Installing Requirements (for Ubuntu)
 
     sudo apt-get install xclip
     sudo apt-get install ruby1.9.1
