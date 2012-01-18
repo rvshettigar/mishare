@@ -1,6 +1,8 @@
-A command line interface for Amazon S3 using Ruby and the AWS SDK for Ruby.
+#Mishare
 
-You need xclip,ruby and gems instaled to use this. 
+Mishare (pronounced my-share) is a command line interface for Amazon S3, Cloudapp and Imgur using Ruby and the AWS SDK for Ruby.
+
+You need xclip, ruby and gems instaled to use this. 
 
 ##Installation
 
@@ -8,9 +10,9 @@ You need xclip,ruby and gems instaled to use this.
 
     sudo apt-get install xclip
     sudo apt-get install ruby1.9.1
-    curl http://production.cf.rubygems.org/rubygems/rubygems-1.8.10.tgz --O rubygems-1.8.10.tgz
-    tar -xzvf rubygems-1.8.10.tgz
-    cd rubygems-1.8.10
+    curl http://production.cf.rubygems.org/rubygems/rubygems-1.8.12.tgz --O rubygems-1.8.12.tgz
+    tar -xzvf rubygems-1.8.12.tgz
+    cd rubygems-1.8.12
     sudo ruby setup.rb
     
     sudo gem install aws-s3
@@ -19,76 +21,38 @@ You need xclip,ruby and gems instaled to use this.
     
 #### 2) Grab the script, copy to /usr/bin and make it executable.
 
-    curl https://raw.github.com/hardikr/s3-rb/master/s3.rb --O s3
-    sudo cp s3.rb /usr/bin/s3
-    sudo chmod a+x /usr/bin/s3
+    curl https://raw.github.com/hardikr/s3-rb/master/mishare.rb --O mishare
+    sudo cp s3.rb /usr/bin/mishare
+    sudo chmod a+x /usr/bin/mishare
 
-#### 3) Create config file ~/.s3 with following format
-    access-key
-    secret-key
-    bucket-name
+#### 3) Now run the script.
+    
+    mishare
 
-#### 4) Optional: If you wish to use the (g)mail feature, create config file ~/.gmail with following format
-    username
-    password
+It should prompt you for credentials as and when it requires them.
 
 ## Examples
 
 #### Upload a file (URL copied to clipboard)
-    s3 -f file.txt
+    mishare ul -f file.txt
     
 #### Upload a file and email it to john@doe.com
-    s3 -f file.txt -e john@doe.com
+    mishare ul -f file.txt -e john@doe.com
 
-#### Generate public torrent URL for file.txt
-    s3 torrent -f file.txt
+#### Generate public torrent URL for file.txt (S3 ONLY)
+    mishare torrent -f file.txt
 
-#### Generate public authenticated URL that expires after 180 seconds
-    s3 expire -f file.txt -t 180
+#### Generate public authenticated URL that expires after 180 seconds and email it to john@doe.com (S3 ONLY)
+    mishare expire -f file.txt -t 180 -e john@doe.com
 
-<<<<<<< HEAD
-#### Cloudapp and Imgur
-s3-rb also supports uploads to Cloudapp and Imgur in the cl-im branch. For more information, click [here](http://code.hardikr.com/s3-rb#clim).
-=======
-## Cloudapp and Imgur
+#### Upload file.txt to Cloudapp and email it to john@doe.com and jane@doe.com
+    mishare email -f file.txt -e john@doe.com jane@doe.com -c
 
-On branch [cl-im][1], there are two more switches to the command. You can use **-i** to upload an image to [Imgur][2], and **-c** to upload to [cloudapp][3] instead of S3. 
+#### Upload an image to imgur.
 
-First, switch your branch already!
-
-    git checkout cl-im
-
-For cloudapp, you need to get the cloudapp_api gem. Get it by running:
-
-    gem install cloudapp_api
-
-To use cloudapp and/or imgur, simply create config files as follows. For imgur, we have **~/.imgur**
-
-    api-key
-    cookie
-
-Get your API key from Imgur.com. The cookie is important if you want the uploaded image to show up in your account. Follow the steps [on this blog post][4] to retrieve your cookie. Otherwise, you can leave out the cookie.
-
-For cloudappp, we have **~/.cloudapp**
-
-    username
-    password
-
-Now you can run cloudapp and imgur by using the -i and -c switches. For example, to upload a file to cloudapp and email it to john@doe.com, we would do:
-
-    s3 email -f file.txt -e john@doe.com -c
-
-Similarly, to upload an image to imgur.
-
-    s3 ul -f file.txt -i
-
- [1]: https://github.com/hardikr/s3-rb/tree/cl-im
- [2]: http://imgur.com
- [3]: http://getcloudapp.com
- [4]: http://code.lancepollard.com/upload-images-to-imgur-with-ruby
+    mishare ul -f file.txt -i
 
 
->>>>>>> encrypt
 ## Credits
 
 Huge thanks to:
@@ -101,7 +65,7 @@ Huge thanks to:
 
     (The MIT License)
     
-    Copyright (c) 2011 Hardik Ruparel
+    Copyright (c) 2011 Hardik Ruparel, h@rdik.org
     
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the
