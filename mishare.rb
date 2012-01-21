@@ -205,7 +205,7 @@ s3rb = OptionParser.new do |opt|
 	opt.separator  "     torrent: Generate a public torrent for a specified file. S3 ONLY"
 	opt.separator  "          	 USAGE: mishare torrent -f FILE [-e EMAIL1,EMAIL2... ]"
 	opt.separator  ""
-	opt.separator  " As shown above, all of the commands can be optionally used with the email -e switch, followed by a comma(or space)-separated list of email addresses."
+	opt.separator  " As shown above, all of the commands can be optionally used with the email -e switch, followed by a space-separated list of email addresses."
 	opt.separator  ""
 	opt.separator  ""
 		
