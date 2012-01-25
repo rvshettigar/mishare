@@ -46,23 +46,29 @@ If you want to manually install everything, or for other operating systems, chec
 It should prompt you for credentials as and when it requires them.
 
 ## Examples
+NB: The URL is copied to clipboard in all the below examples.
 
-### Upload a file (URL copied to clipboard)
+### Upload a file
+
     mishare ul -f file.txt
     
-### Upload a file and email it to john@doe.com
+### Upload and email
+Upload a file and email it to john@doe.com
     mishare ul -f file.txt -e john@doe.com
 
-### Generate public torrent URL for file.txt (S3 ONLY)
+### Generate torrent
+Generate public torrent URL for file.txt (S3 ONLY)
     mishare torrent -f file.txt
 
-### Generate public authenticated URL that expires after 180 seconds and email it to john@doe.com (S3 ONLY)
+### Generate expiring link
+Generate public authenticated URL that expires after 180 seconds and email it to john@doe.com (S3 ONLY)
     mishare expire -f file.txt -t 180 -e john@doe.com
 
-### Upload file.txt to Cloudapp and email it to john@doe.com and jane@doe.com
+### Upload to Cloudapp
+Upload file.txt to Cloudapp and email it to john@doe.com and jane@doe.com
     mishare email -f file.txt -e john@doe.com jane@doe.com -c
 
-### Upload an image to imgur.
+### Upload to imgur.
 
     mishare ul -f file.txt -i
 
