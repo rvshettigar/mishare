@@ -12,6 +12,7 @@ The shell-file install shown below installs ruby1.9.1, rubygems(and a few gems: 
     
     curl https://raw.github.com/hardikr/s3-rb/master/install.sh | sh
 
+###Manual Install
 If you want to manually install everything, or for other operating systems, check below:
 
 ####1) Installing Requirements (for Ubuntu)
@@ -46,22 +47,22 @@ It should prompt you for credentials as and when it requires them.
 
 ## Examples
 
-#### Upload a file (URL copied to clipboard)
+### Upload a file (URL copied to clipboard)
     mishare ul -f file.txt
     
-#### Upload a file and email it to john@doe.com
+### Upload a file and email it to john@doe.com
     mishare ul -f file.txt -e john@doe.com
 
-#### Generate public torrent URL for file.txt (S3 ONLY)
+### Generate public torrent URL for file.txt (S3 ONLY)
     mishare torrent -f file.txt
 
-#### Generate public authenticated URL that expires after 180 seconds and email it to john@doe.com (S3 ONLY)
+### Generate public authenticated URL that expires after 180 seconds and email it to john@doe.com (S3 ONLY)
     mishare expire -f file.txt -t 180 -e john@doe.com
 
-#### Upload file.txt to Cloudapp and email it to john@doe.com and jane@doe.com
+### Upload file.txt to Cloudapp and email it to john@doe.com and jane@doe.com
     mishare email -f file.txt -e john@doe.com jane@doe.com -c
 
-#### Upload an image to imgur.
+### Upload an image to imgur.
 
     mishare ul -f file.txt -i
 
