@@ -74,7 +74,7 @@ Upload file.txt to Cloudapp and email it to john@doe.com and jane@doe.com
 
 ### Upload to imgur.
 
-    mishare ul -f file.txt -i
+    mishare ul -f file.jpg -i
 
 
 ## Credits
