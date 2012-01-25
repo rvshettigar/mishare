@@ -54,18 +54,22 @@ NB: The URL is copied to clipboard in all the below examples.
     
 ### Upload and email
 Upload a file and email it to john@doe.com
+
     mishare ul -f file.txt -e john@doe.com
 
 ### Generate torrent
 Generate public torrent URL for file.txt (S3 ONLY)
+
     mishare torrent -f file.txt
 
 ### Generate expiring link
 Generate public authenticated URL that expires after 180 seconds and email it to john@doe.com (S3 ONLY)
+
     mishare expire -f file.txt -t 180 -e john@doe.com
 
 ### Upload to Cloudapp
 Upload file.txt to Cloudapp and email it to john@doe.com and jane@doe.com
+
     mishare email -f file.txt -e john@doe.com jane@doe.com -c
 
 ### Upload to imgur.
