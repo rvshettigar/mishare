@@ -4,6 +4,8 @@ Mishare (pronounced my-share) is a command line interface for Amazon S3, Cloudap
 
 You need xclip, ruby and gems instaled to use this. 
 
+**Warning: Storing credentials uses symmetrical encryption, and this is certainly not the best way if you are on a shared computer!**
+
 ##Installation
 
 The shell-file install shown below installs ruby1.9.1, rubygems(and a few gems: list is below) and xclip. I suggest you check out the script for yourself before running anything.
