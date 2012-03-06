@@ -34,6 +34,7 @@ If you want to manually install everything, or for other operating systems, chec
     sudo gem install aws-s3
     sudo gem install mail
     sudo gem install ruby-gmail
+    sudo gem install dropbox-sdk
     
 #### 2) Grab the script, copy to /usr/bin and make it executable.
 
@@ -70,7 +71,7 @@ Generate public authenticated URL that expires after 180 seconds and email it to
 
     mishare expire -f file.txt -t 180 -e john@doe.com
 
-### Upload to Dropbx
+### Upload to Dropbox
 Upload file.txt to Dropbox and email it to john@doe.com and jane@doe.com
 
     mishare email -f file.txt -e john@doe.com jane@doe.com -d
@@ -83,6 +84,12 @@ Upload file.txt to Cloudapp and email it to john@doe.com and jane@doe.com
 ### Upload to imgur.
 
     mishare ul -f file.jpg -i
+
+## Watch Out For
+Amazon S3 assumes overwrite to true, by default.
+Dropbox assumes overwrite to false, by default.
+TODO: Add overwrite flag -o
+
 
 
 ## Credits
