@@ -31,6 +31,7 @@
 require 'rubygems'
 require 'json'
 require 'optparse'
+require 'uri'
 begin
 	require 'aws/s3'
 rescue LoadError
@@ -53,6 +54,12 @@ begin
 	require 'cloudapp_api'
 rescue LoadError
 	puts "You need to install cloudapp_api gem: \ngem install cloudapp_api"
+	exit!(1)
+end
+begin
+	require 'dropbox_sdk'
+rescue LoadError
+	puts "You need to install dropbox-sdk gem: \ngem install dropbox-sdk"
 	exit!(1)
 end
 require 'highline/import'
@@ -80,6 +87,8 @@ options[:ssl] = false
 options[:imgur] = false
 # Upload to Cloudapp is false by default
 options[:cl] = false
+#Upload to Dropbox is false by default
+options[:db] = false
 
 s3_config_file = "#{ENV['HOME']}/.s3"
 
@@ -159,6 +168,59 @@ def imgur(key, file_path)
   return JSON.parse(response.body)["rsp"]["image"]["original_image"]  
 end
 
+def db(file_path)
+	db_config_file = "#{ENV['HOME']}/.dbconfig"
+	db_session_file = "#{ENV['HOME']}/.dbsession"
+	if !File.exist?(db_config_file)
+		puts "Looks like you need to setup your Imgur credentials. "
+		dbappkey = get_normal("\n Enter your Dropbox App Key: ")
+		dbsecret = get_normal("\n Enter your Dropbox App Secret: ")
+		config_file = File.new(db_config_file, "w")
+		config_file.puts(dbappkey)
+		config_file.puts(dbsecret)
+		config_file.close()
+	else 
+		dbappkey,dbsecret = File.read(db_config_file).split("\n")
+	end
+
+	if !File.exist?(db_session_file)
+		puts "Looks like we need to authorize you!"
+		session = DropboxSession.new(dbappkey,dbsecret)
+		session.get_request_token
+		authorize_url = session.get_authorize_url
+		puts "AUTHORIZING DROPBOX", authorize_url
+		puts "Please visit that website and hit 'Allow', then hit Enter here."
+		STDIN.gets
+
+		token = session.get_access_token
+		ser = session.serialize()
+		File.open(db_session_file,'w') do |file|
+		 Marshal.dump(ser, file)
+		end
+	
+	else
+		ser = File.open(db_session_file) do |file|
+			Marshal.load(file)
+		end
+	end
+	session = DropboxSession.deserialize(ser)
+
+	client = DropboxClient.new(session, :dropbox)
+	uid = client.account_info()["uid"]
+	file = open(file_path)
+	filename = file_path.split('/')[-1]
+	#warning - overwrite is enabled
+	response = client.put_file("Public/"+filename,file)
+	puts response
+
+	filename = response["path"].split('/')[-1]
+	escaped = URI.escape(filename)
+	path = "http://dl.dropbox.com/u/#{uid}/"+escaped
+	
+	puts path
+	return path
+end
+
 def imgurupload(file)
 	imgurauth = getimgurauth()			
 	imgurresult = imgur(imgurauth, file)
@@ -235,6 +297,10 @@ s3rb = OptionParser.new do |opt|
 		options[:cl] = true
 	end
 
+	opt.on("-d","--db","Upload to dropbox instead of s3") do
+		options[:db] = true
+	end
+
 	opt.on("-h","--help","help") do
 		puts s3rb
 	end
@@ -245,12 +311,16 @@ s3rb.parse!
 case ARGV[0]
 when "ul"
 	if !options[:file]
-		puts "Usage: s3 -f FILE"
+		puts "Usage: s3 ul -f FILE"
+	elsif ((options[:imgur] and options[:db]) or (options[:imgur] and options[:cl]) or (options[:db] and options[:cl]))
+		puts "ERROR! Use only one of --imgur, --cl or --db"
 	else
 		if options[:imgur]
 			url = imgurupload(options[:file])
 		elsif options[:cl]
 			url = clupload(options[:file])
+		elsif options[:db]
+			url = db(options[:file])
 		else
 			url = s3upload(options[:file],options[:ssl])
 		end
@@ -279,7 +349,7 @@ when "expire"
 	end
 when "torrent"
 	if !options[:file]
-		puts "Usage: s3 expire -f FILE"
+		puts "Usage: s3 torrent -f FILE"
 	else
 		result = AWS::S3::S3Object.grant_torrent_access_to(options[:file], $bucket)
 		if result
