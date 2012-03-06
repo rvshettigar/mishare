@@ -90,22 +90,22 @@ options[:cl] = false
 #Upload to Dropbox is false by default
 options[:db] = false
 
-s3_config_file = "#{ENV['HOME']}/.s3"
-
-if !File.exist?(s3_config_file)
-	puts "Looks like you need to setup your S3 credentials. "
-	s3AccessKey = get_normal("\n Enter your Access Key ID: ")
-	s3SecretKey = get_normal("\n Enter your Secret Key:  ")
-	s3BucketName = get_normal("\n Enter your Bucket name: ")
-	config_file = File.new(s3_config_file, "w")
-	config_file.puts(s3AccessKey)
-	config_file.puts(s3SecretKey)
-	config_file.puts(s3BucketName)
-	config_file.close()
-end
 
 def s3upload(file,ssl)
-	s3_config_file = "#{ENV['HOME']}/.s3" 
+	s3_config_file = "#{ENV['HOME']}/.s3"
+
+	if !File.exist?(s3_config_file)
+		puts "Looks like you need to setup your S3 credentials. "
+		s3AccessKey = get_normal("\n Enter your Access Key ID: ")
+		s3SecretKey = get_normal("\n Enter your Secret Key:  ")
+		s3BucketName = get_normal("\n Enter your Bucket name: ")
+		config_file = File.new(s3_config_file, "w")
+		config_file.puts(s3AccessKey)
+		config_file.puts(s3SecretKey)
+		config_file.puts(s3BucketName)
+		config_file.close()
+	end
+
 	accesskey,secretkey,$bucket = File.read(s3_config_file).split("\n")
 	AWS::S3::Base.establish_connection!(
 		:access_key_id     => accesskey,
@@ -211,9 +211,9 @@ def db(file_path)
 	filename = file_path.split('/')[-1]
 	#warning - overwrite is enabled
 	response = client.put_file("Public/"+filename,file)
-	puts response
 
 	filename = response["path"].split('/')[-1]
+	# "bad" form of escape to avoid escaping / etc
 	escaped = URI.escape(filename)
 	path = "http://dl.dropbox.com/u/#{uid}/"+escaped
 	
