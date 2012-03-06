@@ -85,12 +85,32 @@ Upload file.txt to Cloudapp and email it to john@doe.com and jane@doe.com
 
     mishare ul -f file.jpg -i
 
-## Watch Out For
-Amazon S3 assumes overwrite to true, by default.
-Dropbox assumes overwrite to false, by default.
-TODO: Add overwrite flag -o
+## Command and Flag Help
+    **COMMANDS**
+     ul:     Uploads a file to an S3 bucket. 
+               USAGE: mishare ul -f FILE [-e EMAIL1,EMAIL2... ]
+     expire: Generate expiring link to a file with time in seconds. Time is optional, and will default to 3600 seconds. S3 ONLY
+          	 USAGE: mishare expire -f FILE [-t TIME] [-e EMAIL1,EMAIL2... ]
+     torrent: Generate a public torrent for a specified file. S3 ONLY
+          	 USAGE: mishare torrent -f FILE [-e EMAIL1,EMAIL2... ]
+
+     As shown above, all of the commands can be optionally used with the email -e switch, followed by a space-separated list of email addresses.
 
 
+    **OPTIONS**
+        -f, --file FILE                  which file you want to upload
+        -e, --email EMAIL1,EMAIL2        which e-mail address you want to send the link of the uploaded file to
+        -t, --time TIME                  Time(in secons) in which file expires. Defaults to 60 minutes
+        -s, --ssl                        Use SSL (returns https URL)
+        -i, --imgur                      Uploads image to imgur instead of s3
+        -c, --cl                         Upload to cloudapp instead of s3
+        -d, --db                         Upload to dropbox instead of s3
+        -h, --help                       help
+
+
+## Stuff you should know
+*   Amazon S3 assumes overwrite to true, by default.
+*   Dropbox assumes overwrite to false, by default.
 
 ## Credits
 
