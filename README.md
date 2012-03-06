@@ -1,10 +1,10 @@
 #Mishare
 
-Mishare (pronounced my-share) is a command line interface for Amazon S3, Cloudapp and Imgur using Ruby and the AWS SDK for Ruby.
+Mishare (pronounced my-share) is a command line interface for Amazon S3, Dropbox, Cloudapp and Imgur using Ruby and the AWS SDK for Ruby.
 
 You need xclip, ruby and gems instaled to use this. 
 
-**Warning: Storing credentials uses symmetrical encryption, and this is certainly not the best way if you are on a shared computer!**
+**Warning: Storing passwords uses symmetrical encryption, and this is certainly not the best way if you are on a shared computer!**
 
 ##Installation
 
@@ -48,7 +48,8 @@ If you want to manually install everything, or for other operating systems, chec
 It should prompt you for credentials as and when it requires them.
 
 ## Examples
-NB: The URL is copied to clipboard in all the below examples.
+PS : By default, if you don't provide any flags, the script assumes you mean upload to S3.
+PS 2: The URL is copied to clipboard in all the below examples.
 
 ### Upload a file
 
@@ -68,6 +69,11 @@ Generate public torrent URL for file.txt (S3 ONLY)
 Generate public authenticated URL that expires after 180 seconds and email it to john@doe.com (S3 ONLY)
 
     mishare expire -f file.txt -t 180 -e john@doe.com
+
+### Upload to Dropbx
+Upload file.txt to Dropbox and email it to john@doe.com and jane@doe.com
+
+    mishare email -f file.txt -e john@doe.com jane@doe.com -d
 
 ### Upload to Cloudapp
 Upload file.txt to Cloudapp and email it to john@doe.com and jane@doe.com
