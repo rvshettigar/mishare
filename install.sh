@@ -8,6 +8,9 @@ tar -xzvf rubygems-1.8.12.tgz
 cd rubygems-1.8.12
 sudo ruby setup.rb
 
+# Update rubygems
+update_rubygems
+
 # Install needed gems
 sudo gem install json
 sudo gem install rest_client
@@ -19,8 +22,8 @@ sudo gem install mail
 sudo gem install ruby-gmail
 
 # Download and install script
-curl https://raw.github.com/hardikr/s3-rb/master/mishare.rb --O mishare
-sudo cp s3.rb /usr/bin/mishare
+curl https://raw.github.com/hardikr/mishare/master/mishare.rb --O mishare
+sudo cp mishare.rb /usr/bin/mishare
 sudo chmod a+x /usr/bin/mishare
 
 # Run

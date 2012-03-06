@@ -257,17 +257,17 @@ end
 
 
 s3rb = OptionParser.new do |opt|
-	opt.banner = "\nUsage: s3 COMMAND [OPTIONS]"
+	opt.banner = "\nUsage: mishare COMMAND [OPTIONS]"
 	opt.separator  ""
 	opt.separator  "**COMMANDS**"
 	opt.separator  "     ul:     Uploads a file to an S3 bucket. "
-	opt.separator  "          	 USAGE: s3 ul -f FILE [-e EMAIL1,EMAIL2... ]"
-	opt.separator  "     expire: Generate expiring link to a file with time in seconds. Time is optional, and will default to 3600 seconds."
-	opt.separator  "          	 USAGE: s3 expire -f FILE [-t TIME] [-e EMAIL1,EMAIL2... ]"
-	opt.separator  "     torrent: Generate a public torrent for a specified file."
-	opt.separator  "          	 USAGE: s3 torrent -f FILE [-e EMAIL1,EMAIL2... ]"
+	opt.separator  "          	 USAGE: mishare ul -f FILE [-e EMAIL1,EMAIL2... ]"
+	opt.separator  "     expire: Generate expiring link to a file with time in seconds. Time is optional, and will default to 3600 seconds. S3 ONLY"
+	opt.separator  "          	 USAGE: mishare expire -f FILE [-t TIME] [-e EMAIL1,EMAIL2... ]"
+	opt.separator  "     torrent: Generate a public torrent for a specified file. S3 ONLY"
+	opt.separator  "          	 USAGE: mishare torrent -f FILE [-e EMAIL1,EMAIL2... ]"
 	opt.separator  ""
-	opt.separator  " As shown above, all of the commands can be optionally used with the email -e switch, followed by a comma-separated list of email addresses."
+	opt.separator  " As shown above, all of the commands can be optionally used with the email -e switch, followed by a space-separated list of email addresses."
 	opt.separator  ""
 	opt.separator  ""
 		
