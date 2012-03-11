@@ -49,8 +49,10 @@ If you want to manually install everything, or for other operating systems, chec
 It should prompt you for credentials as and when it requires them.
 
 ## Examples
-PS : By default, if you don't provide any flags, the script assumes you mean upload to S3.
-PS 2: The URL is copied to clipboard in all the below examples.
+Notes:
+
+*   The script defaults to S3, so there is no flag/switch for it.
+*   The URL is copied to clipboard by default.
 
 ### Upload a file
 
