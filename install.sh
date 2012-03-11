@@ -24,7 +24,7 @@ sudo gem install dropbox-sdk
 
 # Download and install script
 curl https://raw.github.com/hardikr/mishare/master/mishare.rb --O mishare
-sudo cp mishare.rb /usr/bin/mishare
+sudo mv mishare.rb /usr/bin/mishare
 sudo chmod a+x /usr/bin/mishare
 
 # Run
