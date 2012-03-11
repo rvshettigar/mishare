@@ -4,7 +4,7 @@ Mishare (pronounced my-share) is a command line interface for Amazon S3, Dropbox
 
 You need xclip, ruby and gems instaled to use this. 
 
-**Warning: Storing passwords uses symmetrical encryption, and this is certainly not the best way if you are on a shared computer!**
+**Warning: This project is pre-alpha and while you can use it, I would advise caution since there may be kinks. One probable issue you may have is : GMail and Cloudapp passwords are stored in files using symmetrical encryption, and this is certainly not ideal! You should change the SECRET_KEY constant to your choice of secret key used for the encryption. I haven't found time to implement GMail OAuth yet, so you're welcome to fork and send in a pull-request.**
 
 ##Installation
 

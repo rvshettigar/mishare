@@ -67,6 +67,8 @@ require 'encrypted_strings'
 
 # End of require. Start code
 
+SECRET_KEY = 'my_secret_key'
+
 class HTTParty::Response
   def ok? ; true end
 end
@@ -134,11 +136,11 @@ def clupload(file)
 		clPassword = get_secret("\n Enter your password:  ")
 		config_file = File.new(cl_config_file, "w")
 		config_file.puts(clEmail)
-		config_file.puts(clPassword.encrypt(:symmetric, :password => 'my_secret_key'))
+		config_file.puts(clPassword.encrypt(:symmetric, :password => SECRET_KEY))
 		config_file.close()
 	end
 	email,password = File.read(cl_config_file).split("\n")
-	password = password.decrypt(:symmetric, :password => 'my_secret_key')
+	password = password.decrypt(:symmetric, :password => SECRET_KEY)
 	puts "Connecting to CloudApp..."
 	CloudApp.authenticate(email,password)
 	url = CloudApp::Item.create(:upload, {:file => file}).url
@@ -235,12 +237,12 @@ def sendemail(recipients,url)
 		gPassword = get_secret("\n Enter your password:  ")
 		config_file = File.new(g_config_file, "w")
 		config_file.puts(gEmail)
-		config_file.puts(gPassword.encrypt(:symmetric, :password => 'my_secret_key'))
+		config_file.puts(gPassword.encrypt(:symmetric, :password => SECRET_KEY))
 		config_file.close()
 	end
   
 	gusername,gpassword = File.read(g_config_file).split("\n")
-	gpassword = gpassword.decrypt(:symmetric, :password => 'my_secret_key')
+	gpassword = gpassword.decrypt(:symmetric, :password => SECRET_KEY)
 
 	Gmail.new(gusername, gpassword) do |gmail|
 		gmail.deliver do
