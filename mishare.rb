@@ -322,7 +322,6 @@ if options[:gpg]
 	if options[:email] # if there are recipient(s), it _has_ to be encrypted using their key(s)
 		options[:gpg] = options[:email]
 	end
-	print options[:gpg]
 	encrypted_name = options[:file]+'.gpg'
 	Gpgr::Encrypt.file(options[:file], :to => encrypted_name ).encrypt_using(options[:gpg])
 	options[:file] = options[:file]+'.gpg' # update filename to encrypted
