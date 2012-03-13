@@ -64,6 +64,7 @@ rescue LoadError
 end
 require 'highline/import'
 require 'encrypted_strings'
+require 'gpgr'
 
 # End of require. Start code
 
@@ -93,7 +94,9 @@ options[:cl] = false
 options[:db] = false
 
 
+
 def s3upload(file,ssl)
+	# WARNING - Overwrite is enabled by default. TODO provide option of overwrite
 	s3_config_file = "#{ENV['HOME']}/.s3"
 
 	if !File.exist?(s3_config_file)
@@ -211,7 +214,7 @@ def db(file_path)
 	uid = client.account_info()["uid"]
 	file = open(file_path)
 	filename = file_path.split('/')[-1]
-	#warning - overwrite is enabled
+	#default behavior - overwrite is disabled
 	response = client.put_file("Public/"+filename,file)
 
 	filename = response["path"].split('/')[-1]
@@ -287,6 +290,10 @@ s3rb = OptionParser.new do |opt|
 		options[:time] = time
 	end
 	
+	opt.on("-g","--gpg email",Array,"Encrypt file using this public key") do |gpgemail|
+		options[:gpg] = gpgemail
+	end
+
 	opt.on("-s","--ssl","Use SSL (returns https URL)") do
 		options[:ssl] = true
 	end
@@ -310,6 +317,17 @@ end
 
 s3rb.parse!
 
+# Check if file neeeds to be encrypted
+if options[:gpg]
+	if options[:email] # if there are recipient(s), it _has_ to be encrypted using their key(s)
+		options[:gpg] = options[:email]
+	end
+	print options[:gpg]
+	encrypted_name = options[:file]+'.gpg'
+	Gpgr::Encrypt.file(options[:file], :to => encrypted_name ).encrypt_using(options[:gpg])
+	options[:file] = options[:file]+'.gpg' # update filename to encrypted
+end 
+
 case ARGV[0]
 when "ul"
 	if !options[:file]
@@ -317,6 +335,7 @@ when "ul"
 	elsif ((options[:imgur] and options[:db]) or (options[:imgur] and options[:cl]) or (options[:db] and options[:cl]))
 		puts "ERROR! Use only one of --imgur, --cl or --db"
 	else
+		# Continue with uploading
 		if options[:imgur]
 			url = imgurupload(options[:file])
 		elsif options[:cl]
@@ -326,6 +345,7 @@ when "ul"
 		else
 			url = s3upload(options[:file],options[:ssl])
 		end
+		# Check if we need to email the file
 		if(!options[:email])
 			system("echo '#{url}' | xclip -selection clipboard")
 			puts "\n URL copied to clipboard!"
