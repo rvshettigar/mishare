@@ -1,4 +1,4 @@
-#Mishare
+#Mishare.rb
 
 Mishare (pronounced my-share) is a command line interface for Amazon S3, Dropbox, Cloudapp and Imgur using Ruby and the AWS SDK for Ruby.
 
