@@ -55,12 +55,12 @@ It should prompt you for credentials as and when it requires them.
 *   The URL is copied to clipboard by default.
 *   Use -g for PGP encryption. When using the -e flag for email, the script assumes you're using the public key of the same email address you've provided with -e flag, so you can use the -g option as a switch. If you provide a value to the -g flag, it will be ignored. For Example, in the below command, the file is encrypted and sent using `john@doe.com`'s public key, and `jane@doe.com` is ignored:
 
-        mishare ul -f file.txt -e john@doe.com -g jane@doe.com
+            mishare ul -f file.txt -e john@doe.com -g jane@doe.com
     
 *   When not emailing the file, you need to provide at least one email address after -g flag (else script will return an error):
 
-        mishare ul -f file.txt -g john@doe.com  # works
-        mishare ul -f file.txt -g               # error
+            mishare ul -f file.txt -g john@doe.com  # works
+            mishare ul -f file.txt -g               # error
 
 ## Examples
 
