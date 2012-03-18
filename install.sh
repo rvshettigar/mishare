@@ -21,6 +21,7 @@ sudo gem install aws-s3
 sudo gem install mail
 sudo gem install ruby-gmail
 sudo gem install dropbox-sdk
+sudo gem install gpgr
 
 # Download and install script
 curl https://raw.github.com/hardikr/mishare/master/mishare.rb --O mishare
