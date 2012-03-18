@@ -99,10 +99,12 @@ Upload file.txt to Cloudapp and email it to john@doe.com and jane@doe.com
 
 ### Encrypt file 
 Encrypt using public keys of john@doe.com and jane@doe.com
+
     mishare ul -f file.txt -g john@doe.com jane@doe.com
     
 ### Encrypt and email 
 Encrypt and email file to john@doe.com (will use public key of john@doe.com)
+
     mishare ul -f file.txt -e john@doe.com -g
     
 ## Command and Flag Help
