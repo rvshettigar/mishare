@@ -10,14 +10,14 @@ You need xclip, ruby and gems instaled to use this.
 
 The shell-file install shown below installs ruby1.9.1, rubygems(and a few gems: list is below) and xclip. I suggest you check out the script for yourself before running anything.
 
-### Ubuntu only (one-line install):
+### One-line Install (Ubuntu):
     
     curl https://raw.github.com/hardikr/mishare/master/install.sh | sh
 
-###Manual Install
+### Manual Install
 If you want to manually install everything, or for other operating systems, check below:
 
-####1) Installing Requirements (for Ubuntu)
+#### 1) Installing Requirements (for Ubuntu)
 
     sudo apt-get install xclip
     sudo apt-get install ruby1.9.1
