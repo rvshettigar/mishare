@@ -55,12 +55,13 @@ It should prompt you for credentials as and when it requires them.
 *   The URL is copied to clipboard by default.
 *   Amazon S3 assumes overwrite to true, by default.
 *   Dropbox assumes overwrite to false, by default.
-*   Use -g for PGP encryption. When using the -e flag for email, the script assumes you're using the public key of the same email address you've provided with -e flag, so you can use the -g option as a switch. If you provide a value to the -g flag, it will be ignored. For Example, in the below command, the file is encrypted and sent using `john@doe.com`'s public key, and `jane@doe.com` is ignored:
+*   Use `-g` for GPG encryption. This uses the `gpgr` gem, which is jusn a wrapper over the system gpg binary, which should be installed in `/usr/bin/gpg` 
+*   When using the `-e` flag for email, the script assumes you're using the public key of the same email address you've provided with -e flag, so you can use the -g option as a switch. If you provide a value to the -g flag, it will be ignored. For Example, in the below command, the file is encrypted and sent using `john@doe.com`'s public key, and `jane@doe.com` is ignored:
 
         mishare ul -f file.txt -e john@doe.com -g jane@doe.com # uses john@doe.com's public key
         mishare ul -f file.txt -e john@doe.com -g              # right
     
-*   When not emailing the file, you need to provide at least one email address after -g flag (else script will return an error):
+*   When not emailing the file, you need to provide at least one email address after `-g` flag (else script will return an error):
 
         mishare ul -f file.txt -g john@doe.com  # works
         mishare ul -f file.txt -g               # error
@@ -87,26 +88,32 @@ Generate public authenticated URL that expires after 180 seconds and email it to
     mishare expire -f file.txt -t 180 -e john@doe.com
 
 ### Upload to Dropbox
-Upload file.txt to Dropbox and email it to john@doe.com and jane@doe.com
+Upload file.txt to Dropbox and email it to john@doe.com and jane@doe.com | 
+Flag : `-d`, `--db`
 
     mishare ul -f file.txt -e john@doe.com jane@doe.com -d
 
 ### Upload to Cloudapp
-Upload file.txt to Cloudapp and email it to john@doe.com and jane@doe.com
+Upload file.txt to Cloudapp and email it to john@doe.com and jane@doe.com | 
+Flag : `-c`, `--cl`
 
     mishare ul -f file.txt -e john@doe.com jane@doe.com -c
 
 ### Upload to imgur.
+Upload file.jpg to Imgur (works on images only) | 
+Flag : `-i`, `--imgur`
 
     mishare ul -f file.jpg -i
 
 ### Encrypt file 
-Encrypt using public keys of john@doe.com and jane@doe.com
+Encrypt using public keys of john@doe.com and jane@doe.com | 
+Flag : `-g`, `--gpg`
 
     mishare ul -f file.txt -g john@doe.com jane@doe.com
     
 ### Encrypt and email 
-Encrypt and email file to john@doe.com (will use public key of john@doe.com)
+Encrypt and email file to john@doe.com (will use public key of john@doe.com) | 
+Flag : `-g`, `--gpg`
 
     mishare ul -f file.txt -e john@doe.com -g
     
@@ -130,8 +137,8 @@ Encrypt and email file to john@doe.com (will use public key of john@doe.com)
         -i, --imgur                      Uploads image to imgur instead of s3
         -c, --cl                         Upload to cloudapp instead of s3
         -d, --db                         Upload to dropbox instead of s3
-        -g [EMAIL1,EMAIL2]               Encrypt file using public key(s) of email address(es)
-        -h, --help                       help
+        -g, --gpg [EMAIL1,EMAIL2]        Encrypt file using public key(s) of email address(es)
+        -h, --help                       Print this help
 
 
 ## Credits
