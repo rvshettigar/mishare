@@ -10,7 +10,7 @@ You need xclip, ruby and gems instaled to use this.
 
 The shell-file install shown below installs ruby1.9.1, rubygems(and a few gems: list is below) and xclip. I suggest you check out the script for yourself before running anything.
 
-### One-line Install (Ubuntu):
+### One-line Install (Ubuntu)
     
     curl https://raw.github.com/hardikr/mishare/master/install.sh | sh
 
@@ -49,18 +49,21 @@ If you want to manually install everything, or for other operating systems, chec
 
 It should prompt you for credentials as and when it requires them.
 
-## Note:
+## Note
 
 *   The script defaults to S3, so there is no flag/switch for it.
 *   The URL is copied to clipboard by default.
+*   Amazon S3 assumes overwrite to true, by default.
+*   Dropbox assumes overwrite to false, by default.
 *   Use -g for PGP encryption. When using the -e flag for email, the script assumes you're using the public key of the same email address you've provided with -e flag, so you can use the -g option as a switch. If you provide a value to the -g flag, it will be ignored. For Example, in the below command, the file is encrypted and sent using `john@doe.com`'s public key, and `jane@doe.com` is ignored:
 
-            mishare ul -f file.txt -e john@doe.com -g jane@doe.com
+        mishare ul -f file.txt -e john@doe.com -g jane@doe.com # uses john@doe.com's public key
+        mishare ul -f file.txt -e john@doe.com -g              # right
     
 *   When not emailing the file, you need to provide at least one email address after -g flag (else script will return an error):
 
-            mishare ul -f file.txt -g john@doe.com  # works
-            mishare ul -f file.txt -g               # error
+        mishare ul -f file.txt -g john@doe.com  # works
+        mishare ul -f file.txt -g               # error
 
 ## Examples
 
@@ -130,10 +133,6 @@ Encrypt and email file to john@doe.com (will use public key of john@doe.com)
         -g [EMAIL1,EMAIL2]               Encrypt file using public key(s) of email address(es)
         -h, --help                       help
 
-
-## Stuff you should know
-*   Amazon S3 assumes overwrite to true, by default.
-*   Dropbox assumes overwrite to false, by default.
 
 ## Credits
 
