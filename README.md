@@ -48,11 +48,13 @@ If you want to manually install everything, or for other operating systems, chec
 
 It should prompt you for credentials as and when it requires them.
 
-## Examples
-Notes:
+## Notes:
 
 *   The script defaults to S3, so there is no flag/switch for it.
 *   The URL is copied to clipboard by default.
+*   Use -g for PGP encryption (When using the -e flag for email, the script assumes you're using the public key of the same email address you're emailing it to, so you can use the -g option as a switch. When not emailing the file, you need to provide at least one email address after -g flag.)
+
+## Examples
 
 ### Upload a file
 
@@ -76,17 +78,23 @@ Generate public authenticated URL that expires after 180 seconds and email it to
 ### Upload to Dropbox
 Upload file.txt to Dropbox and email it to john@doe.com and jane@doe.com
 
-    mishare email -f file.txt -e john@doe.com jane@doe.com -d
+    mishare ul -f file.txt -e john@doe.com jane@doe.com -d
 
 ### Upload to Cloudapp
 Upload file.txt to Cloudapp and email it to john@doe.com and jane@doe.com
 
-    mishare email -f file.txt -e john@doe.com jane@doe.com -c
+    mishare ul -f file.txt -e john@doe.com jane@doe.com -c
 
 ### Upload to imgur.
 
     mishare ul -f file.jpg -i
 
+### Encrypt file using public keys of john@doe.com and jane@doe.com
+    mishare ul -f file.txt -g john@doe.com jane@doe.com
+    
+### Encrypt and email file to john@doe.com (will use public key of john@doe.com)
+    mishare ul -f file.txt -e john@doe.com -g
+    
 ## Command and Flag Help
     **COMMANDS**
      ul:     Uploads a file to an S3 bucket. 
@@ -107,6 +115,7 @@ Upload file.txt to Cloudapp and email it to john@doe.com and jane@doe.com
         -i, --imgur                      Uploads image to imgur instead of s3
         -c, --cl                         Upload to cloudapp instead of s3
         -d, --db                         Upload to dropbox instead of s3
+        -g EMAIL1,EMAIL2                 Encrypt file using public key(s) of email address(es)
         -h, --help                       help
 
 
