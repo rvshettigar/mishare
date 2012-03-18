@@ -122,12 +122,12 @@ Encrypt and email file to john@doe.com (will use public key of john@doe.com)
     **OPTIONS**
         -f, --file FILE                  which file you want to upload
         -e, --email EMAIL1,EMAIL2        which e-mail address you want to send the link of the uploaded file to
-        -t, --time TIME                  Time(in secons) in which file expires. Defaults to 60 minutes
+        -t, --time [TIME]                Time(in secons) in which file expires. Defaults to 60 minutes
         -s, --ssl                        Use SSL (returns https URL)
         -i, --imgur                      Uploads image to imgur instead of s3
         -c, --cl                         Upload to cloudapp instead of s3
         -d, --db                         Upload to dropbox instead of s3
-        -g EMAIL1,EMAIL2                 Encrypt file using public key(s) of email address(es)
+        -g [EMAIL1,EMAIL2]               Encrypt file using public key(s) of email address(es)
         -h, --help                       help
 
 
