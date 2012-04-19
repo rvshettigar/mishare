@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Mishare : Command line uploader for Amazon S3, Dropbox, Cloudapp and Imgur in Ruby" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Mishare</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/hardikr/mishare">Fork Me on GitHub</a>
+
+          <h1 id="project_title">Mishare</h1>
+          <h2 id="project_tagline">Command line uploader for Amazon S3, Dropbox, Cloudapp and Imgur in Ruby</h2>
+
+          <section id="downloads">
+            <a class="zip_download_link" href="https://github.com/hardikr/mishare/zipball/master">Download this project as a .zip file</a>
+            <a class="tar_download_link" href="https://github.com/hardikr/mishare/tarball/master">Download this project as a tar.gz file</a>
+          </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>Mishare.rb</h1>
+
+<p>Mishare (pronounced my-share) is a command line interface for Amazon S3, Dropbox, Cloudapp and Imgur using Ruby and the AWS SDK for Ruby.</p>
+
+<p>You need xclip, ruby and gems instaled to use this. </p>
+
+<p><strong>Warning: This project is pre-alpha and while you can use it, I would advise caution since there may be kinks. One probable issue you may have is : GMail and Cloudapp passwords are stored in files using symmetrical encryption, and this is certainly not ideal! You should change the SECRET_KEY constant to your choice of secret key used for the encryption. I haven't found time to implement GMail OAuth yet, so you're welcome to fork and send in a pull-request.</strong></p>
+
+<h2>Installation</h2>
+
+<p>The shell-file install shown below installs ruby1.9.1, rubygems(and a few gems: list is below) and xclip. I suggest you check out the script for yourself before running anything.</p>
+
+<h3>One-line Install (Ubuntu)</h3>
+
+<pre><code>curl <a href="https://raw.github.com/hardikr/mishare/master/install.sh">https://raw.github.com/hardikr/mishare/master/install.sh</a> | sh
+</code></pre>
+
+<h3>Manual Install</h3>
+
+<p>If you want to manually install everything, or for other operating systems, check below:</p>
+
+<h4>1) Installing Requirements (for Ubuntu)</h4>
+
+<pre><code>sudo apt-get install xclip
+sudo apt-get install ruby1.9.1
+curl <a href="http://production.cf.rubygems.org/rubygems/rubygems-1.8.12.tgz">http://production.cf.rubygems.org/rubygems/rubygems-1.8.12.tgz</a> --O rubygems-1.8.12.tgz
+tar -xzvf rubygems-1.8.12.tgz
+cd rubygems-1.8.12
+sudo ruby setup.rb
+
+sudo gem install json
+sudo gem install rest_client
+sudo gem install cloudapp_api
+sudo gem install highline
+sudo gem install encrypted_strings
+sudo gem install aws-s3
+sudo gem install mail
+sudo gem install ruby-gmail
+sudo gem install dropbox-sdk
+sudo gem install gpgr
+</code></pre>
+
+<h4>2) Grab the script, copy to /usr/bin and make it executable.</h4>
+
+<pre><code>curl <a href="https://raw.github.com/hardikr/mishare/master/mishare.rb">https://raw.github.com/hardikr/mishare/master/mishare.rb</a> --O mishare
+sudo cp mishare.rb /usr/bin/mishare
+sudo chmod a+x /usr/bin/mishare
+</code></pre>
+
+<h4>3) Now run the script.</h4>
+
+<pre><code>mishare
+</code></pre>
+
+<p>It should prompt you for credentials as and when it requires them.</p>
+
+<h2>Note</h2>
+
+<ul>
+<li>  The script defaults to S3, so there is no flag/switch for it.</li>
+<li>  The URL is copied to clipboard by default.</li>
+<li>  Amazon S3 assumes overwrite to true, by default.</li>
+<li>  Dropbox assumes overwrite to false, by default.</li>
+<li>  Use <code>-g</code> for GPG encryption. This uses the <code>gpgr</code> gem, which is jusn a wrapper over the system gpg binary, which should be installed in <code>/usr/bin/gpg</code> </li>
+<li>
+<p>When using the <code>-e</code> flag for email, the script assumes you're using the public key of the same email address you've provided with -e flag, so you can use the -g option as a switch. If you provide a value to the -g flag, it will be ignored. For Example, in the below command, the file is encrypted and sent using <code>john@doe.com</code>'s public key, and <code>jane@doe.com</code> is ignored:</p>
+
+<pre><code>mishare ul -f file.txt -e john@doe.com -g jane@doe.com # uses john@doe.com's public key
+mishare ul -f file.txt -e john@doe.com -g              # right
+</code></pre>
+</li>
+<li>
+<p>When not emailing the file, you need to provide at least one email address after <code>-g</code> flag (else script will return an error):</p>
+
+<pre><code>mishare ul -f file.txt -g john@doe.com  # works
+mishare ul -f file.txt -g               # error
+</code></pre>
+</li>
+</ul><h2>Examples</h2>
+
+<h3>Upload a file</h3>
+
+<pre><code>mishare ul -f file.txt
+</code></pre>
+
+<h3>Upload and email</h3>
+
+<p>Upload a file and email it to john@doe.com</p>
+
+<pre><code>mishare ul -f file.txt -e john@doe.com
+</code></pre>
+
+<h3>Generate torrent</h3>
+
+<p>Generate public torrent URL for file.txt (S3 ONLY)</p>
+
+<pre><code>mishare torrent -f file.txt
+</code></pre>
+
+<h3>Generate expiring link</h3>
+
+<p>Generate public authenticated URL that expires after 180 seconds and email it to john@doe.com (S3 ONLY)</p>
+
+<pre><code>mishare expire -f file.txt -t 180 -e john@doe.com
+</code></pre>
+
+<h3>Upload to Dropbox</h3>
+
+<p>Upload file.txt to Dropbox and email it to john@doe.com and jane@doe.com | 
+Flag : <code>-d</code>, <code>--db</code></p>
+
+<pre><code>mishare ul -f file.txt -e john@doe.com jane@doe.com -d
+</code></pre>
+
+<h3>Upload to Cloudapp</h3>
+
+<p>Upload file.txt to Cloudapp and email it to john@doe.com and jane@doe.com | 
+Flag : <code>-c</code>, <code>--cl</code></p>
+
+<pre><code>mishare ul -f file.txt -e john@doe.com jane@doe.com -c
+</code></pre>
+
+<h3>Upload to imgur.</h3>
+
+<p>Upload file.jpg to Imgur (works on images only) | 
+Flag : <code>-i</code>, <code>--imgur</code></p>
+
+<pre><code>mishare ul -f file.jpg -i
+</code></pre>
+
+<h3>Encrypt file</h3>
+
+<p>Encrypt using public keys of john@doe.com and jane@doe.com | 
+Flag : <code>-g</code>, <code>--gpg</code></p>
+
+<pre><code>mishare ul -f file.txt -g john@doe.com jane@doe.com
+</code></pre>
+
+<h3>Encrypt and email</h3>
+
+<p>Encrypt and email file to john@doe.com (will use public key of john@doe.com) | 
+Flag : <code>-g</code>, <code>--gpg</code></p>
+
+<pre><code>mishare ul -f file.txt -e john@doe.com -g
+</code></pre>
+
+<h2>Command and Flag Help</h2>
+
+<pre><code>**COMMANDS**
+ ul:     Uploads a file to an S3 bucket. 
+           USAGE: mishare ul -f FILE [-e EMAIL1,EMAIL2... ]
+ expire: Generate expiring link to a file with time in seconds. Time is optional, and will default to 3600 seconds. S3 ONLY
+         USAGE: mishare expire -f FILE [-t TIME] [-e EMAIL1,EMAIL2... ]
+ torrent: Generate a public torrent for a specified file. S3 ONLY
+         USAGE: mishare torrent -f FILE [-e EMAIL1,EMAIL2... ]
+
+ As shown above, all of the commands can be optionally used with the email -e switch, followed by a space-separated list of email addresses.
+
+
+**OPTIONS**
+    -f, --file FILE                  which file you want to upload
+    -e, --email EMAIL1,EMAIL2        which e-mail address you want to send the link of the uploaded file to
+    -t, --time [TIME]                Time(in secons) in which file expires. Defaults to 60 minutes
+    -s, --ssl                        Use SSL (returns https URL)
+    -i, --imgur                      Uploads image to imgur instead of s3
+    -c, --cl                         Upload to cloudapp instead of s3
+    -d, --db                         Upload to dropbox instead of s3
+    -g, --gpg [EMAIL1,EMAIL2]        Encrypt file using public key(s) of email address(es)
+    -h, --help                       Print this help
+</code></pre>
+
+<h2>Credits</h2>
+
+<p>Huge thanks to:</p>
+
+<p><a href="https://github.com/dcparker">@dcparker</a> for the <a href="https://github.com/dcparker/ruby-gmail">ruby-gmail gem</a>.</p>
+
+<p><a href="https://github.com/marcel">@marcel</a> for the amazing <a href="http://amazon.rubyforge.org/">aws-s3 Ruby SDK</a>.</p>
+
+<h2>LICENSE</h2>
+
+<pre><code>(The MIT License)
+
+Copyright (c) 2011 Hardik Ruparel, h@rdik.org
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+</code></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Mishare maintained by <a href="https://github.com/hardikr">hardikr</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
